@@ -1,6 +1,9 @@
-#define plat_win
 #include "sound3d.h"
 #include <iostream>
+#ifdef _WIN32
+#define PLAT_WIN
+#endif
+
 
 int sound3d::sounds = 0;
 map<string, ALuint> sound3d::buffers;
