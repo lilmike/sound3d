@@ -1,7 +1,7 @@
 #include "sound3d.h"
 #include <iostream>
 #ifdef _WIN32
-#define PLAT_WIN
+#define PLAT_WIN 1
 #endif
 
 
@@ -433,12 +433,14 @@ return false;
 return true;
 }
 }
+/*
 static inline MOB_ConfigValue MOB_ConfigValue_Int( ALint intVal )
 {
 	MOB_ConfigValue value;
 	value.intVal = intVal;
 	return value;
 }
+*/
 
 static inline MOB_ConfigValue MOB_ConfigValue_String( const char *stringVal
 )

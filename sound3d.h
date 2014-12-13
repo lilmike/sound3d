@@ -1,4 +1,7 @@
 #define AL_ALEXT_PROTOTYPES
+#ifdef _WIN32
+#include <windows.h>
+#endif
 #include "alConfigMob.h"
 #include "AL/al.h"
 #include "AL/alc.h"
