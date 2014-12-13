@@ -35,7 +35,7 @@ bool set_velocity(float x, float y, float z);
 bool get_velocity(float *x, float *y, float *z);
 bool set_direction(float x, float y, float z);
 bool get_direction(float *x, float *y, float *z);
-static void set_hrtf(bool hrtf, char *hrtf_table);
+static bool set_hrtf(bool hrtf, char *hrtf_table);
 private:
 ALuint source;
 static map<string, ALuint> buffers;

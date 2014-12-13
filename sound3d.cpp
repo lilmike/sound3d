@@ -450,70 +450,12 @@ static inline MOB_ConfigValue MOB_ConfigValue_String( const char *stringVal
 	return value;
 }
 
-void sound3d::set_hrtf(bool hrtf, char *hrtf_table = "") {
-if(hrtf == true) {
-	ALboolean stuff = alcDeviceEnableHrtfMOB(device, AL_TRUE);
+bool sound3d::set_hrtf(bool hrtf, char *hrtf_table = "") {
+	ALboolean stuff = alcDeviceEnableHrtfMOB(device, (hrtf==true)?AL_TRUE:AL_FALSE);
 	if(stuff == AL_TRUE) {
-			}
-	else {
-		std::cout << "no" << std::endl;
-	}
-
-}
-else {
-	alcDeviceEnableHrtfMOB(device, AL_FALSE);
-}
-	
-		/*
-		if(hrtf == true) {
-		if(strcmp(hrtf_table, "") == 0) {
-const MOB_ConfigKeyValue soundConfig[] =
-{
-#if PLAT_WIN
-  // The default sound output on Windows can't be forced to 44.1 KHz. Outputting at 44.1 KHz is essential to support HRTF, so adding this is on Windows is a good idea
-	{ MOB_ConfigKey_root_drivers , MOB_ConfigValue_String("dsound") }, 
-#endif // #if PLAT_WIN
-	// If you want to use HRTFs, you should be outputting to Stereo sound
-	{ MOB_ConfigKey_root_channels, MOB_ConfigValue_String("stereo") },
-	{ MOB_ConfigKey_root_hrtf    , MOB_ConfigValue_Int(1) },
-	//{MOB_ConfigKey_root_hrtf_tables, MOB_ConfigValue_String("1052.mhr")},
-//	{MOB_ConfigKey_root_wide_stereo, MOB_ConfigValue_Int(1)},
-	{ MOB_ConfigKey_NULL         , 0 }, // This is the terminator for the config array
-};
-alSetConfigMOB( soundConfig );
-		}
-		else {
-			const MOB_ConfigKeyValue soundConfig[] =
-{
-#if PLAT_WIN
-  // The default sound output on Windows can't be forced to 44.1 KHz. Outputting at 44.1 KHz is essential to support HRTF, so adding this is on Windows is a good idea
-	{ MOB_ConfigKey_root_drivers , MOB_ConfigValue_String("dsound") }, 
-#endif // #if PLAT_WIN
-	// If you want to use HRTFs, you should be outputting to Stereo sound
-	{ MOB_ConfigKey_root_channels, MOB_ConfigValue_String("stereo") },
-	{ MOB_ConfigKey_root_hrtf    , MOB_ConfigValue_Int(1) },
-	{MOB_ConfigKey_root_hrtf_tables, MOB_ConfigValue_String(hrtf_table)},
-//	{MOB_ConfigKey_root_wide_stereo, MOB_ConfigValue_Int(1)},
-	{ MOB_ConfigKey_NULL         , 0 }, // This is the terminator for the config array
-};
-alSetConfigMOB( soundConfig );
-		}
+		return true;
 	}
 	else {
-		const MOB_ConfigKeyValue soundConfig[] =
-{
-#if PLAT_WIN
-  // The default sound output on Windows can't be forced to 44.1 KHz. Outputting at 44.1 KHz is essential to support HRTF, so adding this is on Windows is a good idea
-	{ MOB_ConfigKey_root_drivers , MOB_ConfigValue_String("dsound") }, 
-#endif // #if PLAT_WIN
-	// If you want to use HRTFs, you should be outputting to Stereo sound
-	{ MOB_ConfigKey_root_channels, MOB_ConfigValue_String("stereo") },
-	{ MOB_ConfigKey_root_hrtf    , MOB_ConfigValue_Int(0) },
-//	{MOB_ConfigKey_root_hrtf_tables, MOB_ConfigValue_String("1052.mhr")},
-//	{MOB_ConfigKey_root_wide_stereo, MOB_ConfigValue_Int(1)},
-	{ MOB_ConfigKey_NULL         , 0 }, // This is the terminator for the config array
-};
-alSetConfigMOB( soundConfig );
+		return false;
 	}
-*/
 }
