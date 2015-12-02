@@ -1,4 +1,5 @@
 #include "sound3d.h"
+#include <malloc.h>
 //commented for the move to OpenAL 1.17.0
 /*
 #ifdef _WIN32

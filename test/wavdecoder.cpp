@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS 1
 #include "wavdecoder.h"
+#include <malloc.h>
 
 
 unsigned char* load_wav_file(const char *fname, int16_t * chans, int32_t *rate, int32_t *length, int16_t *bits) 
