@@ -1,8 +1,8 @@
-#define AL_ALEXT_PROTOTYPES
+//#define AL_ALEXT_PROTOTYPES //commented for the move to OpenAL 1.17.0
 #ifdef _WIN32
 #include <windows.h>
 #endif
-#include "alConfigMob.h"
+//#include "alConfigMob.h" //commented for the move.
 #include "AL/al.h"
 #include "AL/alc.h"
 #include "AL/alext.h"

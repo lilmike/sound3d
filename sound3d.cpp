@@ -1,8 +1,10 @@
 #include "sound3d.h"
-#include <iostream>
+//commented for the move to OpenAL 1.17.0
+/*
 #ifdef _WIN32
 #define PLAT_WIN 1
 #endif
+*/
 
 
 int sound3d::sounds = 0;
@@ -12,6 +14,8 @@ ALCcontext *sound3d::context = NULL;
 
 
 sound3d::sound3d() {
+//commented for the move to OpenAL 1.17.0
+/*
 const MOB_ConfigKeyValue soundConfig[] =
 {
 #if PLAT_WIN
@@ -26,6 +30,7 @@ const MOB_ConfigKeyValue soundConfig[] =
 	{ MOB_ConfigKey_NULL         , 0 }, // This is the terminator for the config array
 };
 alSetConfigMOB( soundConfig );
+*/
 	if(!device) {
 alcGetError(device);
 device = alcOpenDevice(NULL);
@@ -68,7 +73,6 @@ while(it!=buffers.end()) {
 alDeleteBuffers(1, &(it->second));
 buffers.erase(it++);
 }
-alDeleteSources(1, &source);
 if(context) {
 alcDestroyContext(context);
 }
@@ -183,7 +187,6 @@ alGetError();
 ALenum state;
 alGetSourcei(source, AL_SOURCE_STATE, &state);
 if(state == AL_PLAYING) {
-
 return true;
 }
 else {
@@ -197,7 +200,6 @@ return false;
 
 bool sound3d::is_active() {
 if(!active) {
-log("not active now!");
 return false;
 }
 else {
@@ -442,6 +444,8 @@ static inline MOB_ConfigValue MOB_ConfigValue_Int( ALint intVal )
 }
 */
 
+//commented for the move to 1.17.0
+/*
 static inline MOB_ConfigValue MOB_ConfigValue_String( const char *stringVal
 )
 {
@@ -449,8 +453,11 @@ static inline MOB_ConfigValue MOB_ConfigValue_String( const char *stringVal
 	value.stringVal = stringVal;
 	return value;
 }
+*/
 
-bool sound3d::set_hrtf(bool hrtf, char *hrtf_table = "") {
+bool sound3d::set_hrtf(bool hrtf, int hrtf_table) {
+//commented for the move to 1.17.0
+/*
 	ALboolean stuff = alcDeviceEnableHrtfMOB(device, (hrtf==true)?AL_TRUE:AL_FALSE);
 	if(stuff == AL_TRUE) {
 		return true;
@@ -458,4 +465,44 @@ bool sound3d::set_hrtf(bool hrtf, char *hrtf_table = "") {
 	else {
 		return false;
 	}
+*/
+if(!alcIsExtensionPresent(device, "ALC_HRTF_SOFT")) {
+return false;
+}
+ALCint attr [] = {ALC_HRTF_SOFT, (hrtf)?ALC_TRUE:ALC_FALSE, (hrtf_table < 0)?0:ALC_HRTF_SPECIFIER_SOFT, hrtf_table, 0};
+alcGetError();
+((alcResetDeviceSOFT) = alcGetProcAddress((device), #alcResetDeviceSOFT));
+alcResetDeviceSOFT(device, attr);
+if(alcGetError != ALC_NO_ERROR) {
+return false;
+}
+return true;
+}
+
+bool sound3d::set_hrtf(bool hrtf, string hrtf_table="") {
+if(hrtf_table == "") {
+return set_hrtf(hrtf);
+}
+else {
+((alcGetStringiSOFT) = alcGetProcAddress((device), #alcGetStringiSOFT));
+ALCint num;
+alcGetIntegerv(device, ALC_NUM_SPECIFIERS_HRTF_SOFT, 1, &num);
+if(!num) {
+return false;
+}
+else {
+ALCint index = -1;
+for(ALCint i = 0; i < num; i++) {
+            const ALCchar *name = alcGetStringiSOFT(device, ALC_HRTF_SPECIFIER_SOFT, i);
+if(str_cmp(name, hrtf_table) == 0) {
+index = i;
+}
+}
+if(index == -1) {
+return false;
+}
+else {
+return set_hrtf(hrtf, index);
+}
+}
 }
