@@ -37,6 +37,7 @@ bool set_direction(float x, float y, float z);
 bool get_direction(float *x, float *y, float *z);
 static bool set_hrtf(bool hrtf, string hrtf_table);
 static bool set_hrtf(bool hrtf, int hrtf_table);
+static ALCdevice* get_device();
 private:
 ALuint source;
 static map<string, ALuint> buffers;
@@ -44,5 +45,6 @@ bool active;
 static ALCdevice *device;
 static ALCcontext *context;
 static int sounds;
+static int table;
 void log(string s);
 };
