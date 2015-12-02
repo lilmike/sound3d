@@ -1,4 +1,5 @@
 #include "sound3d.h"
+#include <malloc.h>
 //commented for the move to OpenAL 1.17.0
 /*
 #ifdef _WIN32
@@ -11,7 +12,7 @@ int sound3d::sounds = 0;
 map<string, ALuint> sound3d::buffers;
 ALCdevice *sound3d::device= NULL;
 ALCcontext *sound3d::context = NULL;
-
+int sound3d::table = -1;
 
 sound3d::sound3d() {
 //commented for the move to OpenAL 1.17.0
@@ -469,24 +470,27 @@ bool sound3d::set_hrtf(bool hrtf, int hrtf_table) {
 if(!alcIsExtensionPresent(device, "ALC_HRTF_SOFT")) {
 return false;
 }
-ALCint attr [] = {ALC_HRTF_SOFT, (hrtf)?ALC_TRUE:ALC_FALSE, (hrtf_table < 0)?0:ALC_HRTF_SPECIFIER_SOFT, hrtf_table, 0};
-alcGetError();
-((alcResetDeviceSOFT) = alcGetProcAddress((device), #alcResetDeviceSOFT));
+ALCint attr [] = {ALC_HRTF_SOFT, (hrtf)?ALC_TRUE:ALC_FALSE, ALC_HRTF_SPECIFIER_SOFT, hrtf_table, 0};
+alcGetError(device);
+LPALCRESETDEVICESOFT alcResetDeviceSOFT = (LPALCRESETDEVICESOFT)(alcGetProcAddress(device, "alcResetDeviceSOFT"));
 alcResetDeviceSOFT(device, attr);
-if(alcGetError != ALC_NO_ERROR) {
+if(alcGetError(device) != ALC_NO_ERROR) {
 return false;
 }
+table = hrtf_table;
 return true;
 }
 
-bool sound3d::set_hrtf(bool hrtf, string hrtf_table="") {
+bool sound3d::set_hrtf(bool hrtf, string hrtf_table) {
 if(hrtf_table == "") {
-return set_hrtf(hrtf);
+if(table == -1)
+return false;
+return set_hrtf(hrtf, table);
 }
 else {
-((alcGetStringiSOFT) = alcGetProcAddress((device), #alcGetStringiSOFT));
+LPALCGETSTRINGISOFT alcGetStringiSOFT = (LPALCGETSTRINGISOFT)(alcGetProcAddress(device, "alcGetStringiSOFT"));
 ALCint num;
-alcGetIntegerv(device, ALC_NUM_SPECIFIERS_HRTF_SOFT, 1, &num);
+alcGetIntegerv(device, ALC_NUM_HRTF_SPECIFIERS_SOFT, 1, &num);
 if(!num) {
 return false;
 }
@@ -494,7 +498,7 @@ else {
 ALCint index = -1;
 for(ALCint i = 0; i < num; i++) {
             const ALCchar *name = alcGetStringiSOFT(device, ALC_HRTF_SPECIFIER_SOFT, i);
-if(str_cmp(name, hrtf_table) == 0) {
+if(strcmp(name, hrtf_table.c_str()) == 0) {
 index = i;
 }
 }
@@ -505,4 +509,9 @@ else {
 return set_hrtf(hrtf, index);
 }
 }
+}
+}
+
+ALCdevice* sound3d::get_device() {
+return device;
 }
